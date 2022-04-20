@@ -37,16 +37,15 @@ with open(file_to_load) as election_data:
         candidate_votes[row[2]] += 1
 
 # Print the results
-print(f'\nTotal Votes Cast: {total_votes:,}') # total number of votes
-candidate_options.sort()                    # Sort the candidate list
-print('\nCandidates:')
-for candidate in candidate_options:         # List each candidate, along with candidate's vote count and vote proportion (%)
-    print(f'{candidate}: {candidate_votes[candidate]:,} votes, {100 * candidate_votes[candidate] / total_votes:.1f}% of total')
-    if candidate_votes['winner']['votes'] < candidate_votes[candidate]: # If the candidate has more votes than the current 'winner', then
-        candidate_votes['winner']['name'] = candidate                   # set the potential winner's name to the current candidate's,
-        candidate_votes['winner']['votes'] = candidate_votes[candidate] # and record the candidate's vote count
-# print(f'\nWinner: {candidate_votes['winner']['name']}!')    # 5. The winner!
-print(f"\nWinner: {candidate_votes['winner']['name']}!\n")
+# print(f'\nTotal Votes Cast: {total_votes:,}')   # total number of votes
+# candidate_options.sort()                        # Sort the candidate list
+# print('\nCandidates:')
+# for candidate in candidate_options:             # List each candidate, along with candidate's vote count and vote proportion (%)
+#     print(f'{candidate}: {candidate_votes[candidate]:,} votes, {100 * candidate_votes[candidate] / total_votes:.1f}% of total')
+#     if candidate_votes['winner']['votes'] < candidate_votes[candidate]: # If the candidate has more votes than the current 'winner', then
+#         candidate_votes['winner']['name'] = candidate                   # set the potential winner's name to the current candidate's,
+#         candidate_votes['winner']['votes'] = candidate_votes[candidate] # and record the candidate's vote count
+# print(f"\nWinner: {candidate_votes['winner']['name']}!\n")
 
 # Create a filename name to a direct or indirect path to the file.
 file_to_save = os.path.join('analysis', 'election_analysis.txt')
@@ -54,8 +53,25 @@ file_to_save = os.path.join('analysis', 'election_analysis.txt')
 # Open the analysis file in 'write' mode
 with open(file_to_save, 'w') as txt_file:
     
-    # Write some data to outfile
-    txt_file.write('Counties in Election\n---------------------\nArapahoe\nDenver\nJefferson')
+    # Collate the results
+    election_results = (
+        f"Election Results"
+        f"\n-------------------------"
+        f"\nTotal Votes Cast: {total_votes:,}"  # total number of votes
+        f"\n-------------------------"
+    )
+    # print(election_results, end="")
+    
+    # Save the final vote count to output file
+    txt_file.write(election_results)
+    
+    for candidate in candidate_options:             # List each candidate, along with candidate's vote count and vote proportion (%)
+        candidate_results = f'\n{candidate}: {candidate_votes[candidate]:,} votes, {100 * candidate_votes[candidate] / total_votes:.1f}% of total'
+        txt_file.write(candidate_results)
+        if candidate_votes['winner']['votes'] < candidate_votes[candidate]: # If the candidate has more votes than the current 'winner', then
+            candidate_votes['winner']['name'] = candidate                   # set the potential winner's name to the current candidate's,
+            candidate_votes['winner']['votes'] = candidate_votes[candidate] # and record the candidate's vote count
+    txt_file.write(f"\n-------------------------\nWinner: {candidate_votes['winner']['name']}!")
 
 # Close the files
 # election_data.close()
